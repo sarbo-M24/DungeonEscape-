@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+
+public class Player : MonoBehaviour , IDamageable
 {
     [SerializeField] private float MoveSpeed;
     [SerializeField] private LayerMask JumpableGround;
     [SerializeField] private float JumpSpeed;
     [SerializeField] private float JumpCooldown = 1f;
     [SerializeField] private float AttkCooldown = 0f;
+    [SerializeField] private int Health = 4;
 
     private Rigidbody2D rb;
     private BoxCollider2D coll;
@@ -20,6 +23,7 @@ public class Player : MonoBehaviour
 
     float horizontalInput;
     
+    public int health { get; set; }
 
     void Start()
     {
@@ -83,4 +87,29 @@ public class Player : MonoBehaviour
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, JumpableGround);
     }
 
+
+    public void damage() 
+    {
+        Debug.Log("Player Damage() is called");
+
+        PlayerAnim.hit();
+        Health--;
+
+        if (Health == 0) 
+        {
+            Die();
+        }
+    }
+
+    void Die() 
+    {
+        //Set animation to death
+        rb.bodyType = RigidbodyType2D.Static;
+        RestartLevel();
+    }
+
+    void RestartLevel() 
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

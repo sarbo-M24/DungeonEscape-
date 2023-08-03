@@ -55,6 +55,9 @@ public class PlayerAnimation : MonoBehaviour
         swordAnim.SetTrigger("Sword");
     }
 
-   
+    public void hit() 
+    {
+        anim.SetTrigger("Hit");
+    }
 
 }
